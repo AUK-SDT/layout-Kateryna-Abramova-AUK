@@ -186,7 +186,7 @@ class MonobankHomePage extends StatelessWidget {
     );
   }
 
-  // --- 3. Quick Action Buttons ---
+  //Quick Action Buttons
   Widget _buildActionButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
