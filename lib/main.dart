@@ -24,6 +24,7 @@ class MonobankApp extends StatelessWidget {
 
 class MonobankHomePage extends StatelessWidget {
   final String title;
+
   const MonobankHomePage({super.key, required this.title});
 
   @override
@@ -32,16 +33,19 @@ class MonobankHomePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _buildTopBar(),
+            _buildTopBar(context),
             const SizedBox(height: 20),
 
             buildCreditCard(),
             const SizedBox(height: 30),
 
+            buildSmallCardSwitch(),
+            const SizedBox(height: 30),
+
             _buildActionButtons(),
             const SizedBox(height: 30),
 
-            Expanded(child: _buildTransactionHistory()),
+            Expanded(child: buildTransactionHistory()),
           ],
         ),
       ),
@@ -49,7 +53,7 @@ class MonobankHomePage extends StatelessWidget {
   }
 
   //Top Bar (Avatar, Balance, Stats)
-  Widget _buildTopBar() {
+  Widget _buildTopBar(context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -76,6 +80,34 @@ class MonobankHomePage extends StatelessWidget {
                   Text(
                     '100.00 ₴  |',
                     style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.pets_rounded,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Mono Alert"),
+                            content: const Text(
+                              "This is an alert about your mono 🐾, because button was pressed",
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
                   IconButton(
                     icon: const Icon(
@@ -106,13 +138,20 @@ class MonobankHomePage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 4),
-              Text(
-                '1 000 000 000.99 ₴',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              Row(
+                spacing: 5,
+                mainAxisAlignment: .center,
+                children: [
+                  Icon(Icons.add_circle_rounded, color: Colors.grey),
+                  Text(
+                    '1 000 000 000.99 ₴',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -217,8 +256,8 @@ class MonobankHomePage extends StatelessWidget {
     );
   }
 
-  // --- 4. Transaction History Bottom Sheet ---
-  Widget _buildTransactionHistory() {
+  //ransaction History Bottom Sheet
+  Widget buildTransactionHistory() {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -264,6 +303,7 @@ class MonobankHomePage extends StatelessWidget {
             ),
           ),
 
+          //transactions
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(
@@ -292,6 +332,21 @@ class MonobankHomePage extends StatelessWidget {
                   '-320.50 ₴',
                   Icons.local_pharmacy,
                   Colors.teal,
+                ),
+                buildTransactionItem(
+                  'EVA',
+                  '2 Січня, 17:39',
+                  '-920.50 ₴',
+                  Icons.local_pharmacy,
+                  Colors.deepOrangeAccent,
+                ),
+                buildTransactionItem(
+                  'Термінал mono',
+                  '1 Січня, 9:25',
+                  '10 000.99 ₴',
+                  Icons.person,
+                  Colors.green,
+                  isIncome: true,
                 ),
               ],
             ),
@@ -352,6 +407,25 @@ class MonobankHomePage extends StatelessWidget {
               color: isIncome ? Colors.green : Colors.black,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSmallCardSwitch() {
+    return Container(
+      width: 80,
+      height: 20,
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        spacing: 3,
+        mainAxisAlignment: .center,
+        children: [
+          Icon(Icons.circle, size: 10, color: Colors.white),
+          Icon(Icons.add, size: 10, color: Colors.white),
         ],
       ),
     );
